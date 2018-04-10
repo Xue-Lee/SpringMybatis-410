@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icss.dao.CartDao">
+	<select id="findCartByClient" resultType="cart">
+	select * FROM cart WHERE clientId=#{clientId};
+	</select>
+	<resultMap type="cart" id="cartBook">
+		<id property="cartId" column="cartId"/><!-- 主键 -->
+		<result property="clientId" column="clientId"/><!-- 非主键 -->
+		<result property="cnt" column="cnt"/><!-- 非主键 -->
+		<association property="bookId" column="bookId" javaType="book">
+			<!-- book的映射 -->
+			<id property="bookid" column="bookid"/>
+			<result property="bookname" column="bookname"/>
+			<result property="author" column="author"/>
+			<result property="price" column="price"/>
+		</association>
+	</resultMap>
+	<select id="findCartBookByClient" resultMap="cartBook">
+	select * FROM cart ct,book bk WHERE ct.bookId=bk.bookid and  clientId=#{clientId};
+	</select>
+	<select id="findCartBookById" resultMap="cartBook">
+	select * FROM cart ct,book bk WHERE ct.bookId=bk.bookid and  cartId=#{cartId};
+	</select>
+</mapper>

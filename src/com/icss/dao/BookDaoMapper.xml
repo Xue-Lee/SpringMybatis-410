@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icss.dao.BookDao">
+	<sql id="booksql">select * from book</sql>
+	<select id="findBookAll" resultType="book">
+		<include refid="booksql"/>
+	</select>
+	<select id="findBookByAuthor" resultType="book">
+		<include refid="booksql"/> where author=#{author};
+	</select>
+	<select id="findBookByPrice" resultType="book">
+		<include refid="booksql"/> where price &lt; #{price}
+	</select>
+	<select id="findBookByPress" resultType="book">
+		<include refid="booksql"/> where press LIKE #{press}
+	</select>
+	<select id="findBookByPress1" resultType="book">
+		<include refid="booksql"/> 
+		<if test="_parameter!=null">
+		where press LIKE concat(#{press},'%');
+		</if>
+	</select>
+	
+	<select id="findBookByAuthorPrice" resultType="book">
+		<include refid="booksql"/> 
+		where author=#{author} and price >#{price};
+	</select>
+	<select id="findBookByAuthorPrice1" resultType="book">
+		<include refid="booksql"/> 
+		<where>
+		<if test="author!=null">
+		author=#{author}
+		</if>
+		<if test="price!=null">
+		and price >#{price};
+		</if>
+		</where>
+	</select>
+	<select id="findBookByAuthorPrice2" resultType="book">
+		<include refid="booksql"/> 
+		where 1=1
+		<if test="author!=null">
+		and author=#{author}
+		</if>
+		<if test="price!=null">
+		and price >#{price}
+		</if>
+	</select>
+	
+	<select id="findBookByAuthorPrice3" resultType="book">
+	<include refid="booksql"/> 
+		<trim prefix="where" prefixOverrides="and">
+			<if test="author!=null">
+			<!-- and可以省略 -->
+			 and author=#{author}
+			</if>
+			<if test="price!=null">
+			and price >#{price}
+			</if>
+		</trim>	
+	</select>
+	<update id="updateBook">
+		update book
+		<set>
+			<if test="press!=null">
+				press = #{press},
+			</if>
+			<if test="price!=null">
+				price = #{price},
+			</if>
+		</set>
+		where bookid = #{bookid}
+	</update>
+	<update id="updateBook1">
+		update book
+		<trim prefix="set" suffixOverrides=",">		
+			<if test="press!=null">
+				press = #{press},
+			</if>
+			<if test="price!=null">
+				price = #{price},
+			</if>
+		</trim>
+		where bookid = #{bookid}
+	</update>
+	
+	<select id="findBookByPresses" resultType="book">
+		select * from book press in ('三联书店出版社','人民邮电出版社');
+	
+	</select>
+	
+	<select id="findBookByPresses1" resultType="book">
+		select * from  book where press IN 
+		<foreach collection="list" item="ps" open="(" close=")" separator=",">
+		#{ps}
+		</foreach>
+		;
+	</select>
+	
+</mapper>

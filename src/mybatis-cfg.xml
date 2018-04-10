@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.icss.entity.Cart" alias="cart"/>
+		<typeAlias type="com.icss.entity.Book" alias="book"/>
+		<typeAlias type="com.icss.entity.BookOrders" alias="order"/>
+		<typeAlias type="com.icss.entity.BookOrderDetail" alias="detail"/>
+		<typeAlias type="com.icss.entity.Teacher" alias="teacher"/>
+	</typeAliases>
+	<environments default="t1">
+		<environment id="t1">
+			<transactionManager type="JDBC"></transactionManager>
+			<dataSource type="POOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver"/>
+				<property name="url" value="jdbc:mysql://localhost:3306/bookMarket?characterEncoding=utf8"/>
+				<property name="username" value="root"/>
+				<property name="password" value="root"/>
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="com/icss/dao/BookDaoMapper.xml"/>
+		<mapper resource="com/icss/dao/TeacherDaoMapper.xml"/>
+	</mappers>
+</configuration>
